@@ -6,14 +6,14 @@ var Cloud = {
   X: 100,
   Y: 10,
   GAP: 10,
-  COLOR: 'rgba(0, 0, 0, 0.7)',
-  SHADOW_COLOR: '#fff'
+  COLOR: '#fff',
+  SHADOW_COLOR: 'rgba(0, 0, 0, 0.7)'
 };
 
 var Text = {
-  GAP: 20,
-  HEIGHT: 20,
-  NAMES_Y: 260
+  MESSAGE_GAP: 20,
+  BAR_TEXT_GAP: 5,
+  HEIGHT: 20
 };
 
 var Bar = {
@@ -27,16 +27,16 @@ var Bar = {
 var MIN_SATURATION = 0;
 var MAX_SATURATION = 100;
 
-function renderCloud(ctx) {
-  ctx.fillStyle = Cloud.COLOR;
-  ctx.fillRect(Cloud.X, Cloud.Y, Cloud.WIDTH, Cloud.HEIGHT);
-  ctx.fillStyle = Cloud.SHADOW_COLOR;
-  ctx.fillRect(Cloud.X + Cloud.GAP, Cloud.Y + Cloud.GAP, Cloud.WIDTH, Cloud.HEIGHT);
+function renderCloud(ctx, options) {
+  ctx.fillStyle = options.SHADOW_COLOR;
+  ctx.fillRect(options.X + options.GAP, options.Y + options.GAP, options.WIDTH, options.HEIGHT);
+  ctx.fillStyle = options.COLOR;
+  ctx.fillRect(options.X, options.Y, options.WIDTH, options.HEIGHT);
 }
 
-function renderText(ctx, message, x, y) {
+function renderText(ctx, message, x, y, baseline) {
   ctx.font = '16px PT Mono';
-  ctx.textBaseline = 'hanging';
+  ctx.textBaseline = baseline;
   ctx.fillStyle = '#000';
   ctx.fillText(message, x, y);
 }
@@ -53,39 +53,44 @@ function getMaxElement(arr) {
   return maxElement;
 }
 
-function getRandomSaturation(min, max) {
-  return Math.floor(Math.random() * (max - min + 1));
+function getBarSpace(arr, cloudWidth, barWidth) {
+  return ((cloudWidth - (barWidth * arr.length)) / (arr.length + 1));
 }
 
-function renderTimeBar(ctx, names, times) {
+function getRandomValue(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function renderTimeBar(ctx, names, times, textOptions, barOptions) {
   var maxTime = getMaxElement(times);
+  var barSpace = getBarSpace(times, Cloud.WIDTH, Bar.WIDTH);
 
   for (var i = 0; i < names.length; i++) {
-    var propBarHeight = Bar.HEIGHT * times[i] / maxTime;
-    var barSpaceTotal = (Bar.SPACE + Bar.WIDTH);
-    var coordX = Bar.X + (barSpaceTotal * i);
-    var coordY = Bar.Y - propBarHeight - Text.GAP;
-    var saturation = getRandomSaturation(MIN_SATURATION, MAX_SATURATION);
+    var propBarHeight = barOptions.HEIGHT * times[i] / maxTime;
+    var barSpaceTotal = (barSpace + barOptions.WIDTH);
+    var coordX = barOptions.X + (barSpaceTotal * i);
+    var coordY = barOptions.Y - propBarHeight;
+    var saturation = getRandomValue(MIN_SATURATION, MAX_SATURATION);
 
-    renderText(ctx, names[i], coordX, Text.NAMES_Y);
-    renderText(ctx, Math.round(times[i]).toString(), coordX, coordY);
+    renderText(ctx, names[i], coordX, barOptions.Y + textOptions.BAR_TEXT_GAP, 'top');
+    renderText(ctx, Math.round(times[i]).toString(), coordX, coordY - textOptions.BAR_TEXT_GAP, 'bottom');
 
     ctx.fillStyle = (names[i] === 'Вы')
       ? 'rgba(255, 0, 0, 1)'
       : 'hsl(255,' + saturation + '% , 50%)';
 
-    ctx.fillRect(coordX, Bar.Y, Bar.WIDTH, -propBarHeight);
+    ctx.fillRect(coordX, barOptions.Y, barOptions.WIDTH, -propBarHeight);
   }
 }
 
 window.renderStatistics = function (ctx, names, times) {
-  var coordX = Cloud.X + Text.GAP;
-  var coordY = Cloud.Y + Text.GAP;
+  var coordX = Cloud.X + Text.MESSAGE_GAP;
+  var coordY = Cloud.Y + Text.MESSAGE_GAP;
 
-  renderCloud(ctx);
+  renderCloud(ctx, Cloud);
 
-  renderText(ctx, 'Ура вы победили!', coordX, coordY);
-  renderText(ctx, 'Список Результатов', coordX, coordY + Text.HEIGHT);
+  renderText(ctx, 'Ура вы победили!', coordX, coordY, 'top');
+  renderText(ctx, 'Список Результатов:', coordX, coordY + Text.HEIGHT, 'top');
 
-  renderTimeBar(ctx, names, times);
+  renderTimeBar(ctx, names, times, Text, Bar);
 };
