@@ -64,10 +64,10 @@ function getRandomValue(min, max) {
 function renderTimeBar(ctx, names, times, textOptions, barOptions) {
   var maxTime = getMaxElement(times);
   var barSpace = getBarSpace(times, Cloud.WIDTH, Bar.WIDTH);
+  var barSpaceTotal = (barSpace + barOptions.WIDTH);
 
   for (var i = 0; i < names.length; i++) {
     var propBarHeight = barOptions.HEIGHT * times[i] / maxTime;
-    var barSpaceTotal = (barSpace + barOptions.WIDTH);
     var coordX = barOptions.X + (barSpaceTotal * i);
     var coordY = barOptions.Y - propBarHeight;
     var saturation = getRandomValue(MIN_SATURATION, MAX_SATURATION);
