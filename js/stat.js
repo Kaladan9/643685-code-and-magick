@@ -69,11 +69,11 @@ function renderTimeBar(ctx, names, times, textOptions, barOptions) {
   for (var i = 0; i < names.length; i++) {
     var propBarHeight = barOptions.HEIGHT * times[i] / maxTime;
     var coordX = barOptions.X + (barSpaceTotal * i);
-    var coordY = barOptions.Y - propBarHeight;
+    var scoreCoordY = barOptions.Y - propBarHeight;
     var saturation = getRandomValue(MIN_SATURATION, MAX_SATURATION);
 
     renderText(ctx, names[i], coordX, barOptions.Y + textOptions.BAR_TEXT_GAP, 'top');
-    renderText(ctx, Math.round(times[i]).toString(), coordX, coordY - textOptions.BAR_TEXT_GAP, 'bottom');
+    renderText(ctx, Math.round(times[i]).toString(), coordX, scoreCoordY - textOptions.BAR_TEXT_GAP, 'bottom');
 
     ctx.fillStyle = (names[i] === 'Вы')
       ? 'rgba(255, 0, 0, 1)'
