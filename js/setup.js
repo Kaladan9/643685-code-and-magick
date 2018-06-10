@@ -39,7 +39,7 @@ function createWizardsList(wizardOption) {
   return wizards;
 }
 
-function renderWizard(wizard) {
+function createWizard(wizard) {
   var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
     .querySelector('.setup-similar-item');
@@ -57,7 +57,7 @@ function renderWizardList(wizard, wizardCount) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < wizardCount; i++) {
-    fragment.appendChild(renderWizard(wizard[i]));
+    fragment.appendChild(createWizard(wizard[i]));
   }
   similarListElement.appendChild(fragment);
 }
@@ -67,8 +67,11 @@ function showSetup(wizardOption) {
 
   renderWizardList(wizardsList, wizardOption.COUNT);
 
-  document.querySelector('.setup').classList.remove('hidden');
-  document.querySelector('.setup-similar').classList.remove('hidden');
+  var setupContainer = document.querySelector('.setup');
+  var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
+
+  setupContainer.classList.remove('hidden');
+  setupSimilarContainer.classList.remove(('hidden'));
 }
 
 showSetup(Wizards);
