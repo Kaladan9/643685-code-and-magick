@@ -14,8 +14,16 @@ var Wizards = {
   COUNT: 4
 };
 
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
+var KeyCodes = {
+  ESC: 27,
+  ENTER: 13
+}
+
+var pageElements = {
+  setupOpen: document.querySelector('.setup-open'),
+  setupClose: document.querySelector('.setup-close')
+}
+
 
 function getRandomArrValue(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -70,13 +78,13 @@ function renderWizardList(wizard, wizardCount) {
 
 function onPopupEscPress(evt) {
   var setupUserName = document.querySelector('.setup-user-name');
-  if ((evt.keyCode === ESC_KEYCODE) && !(setupUserName === document.activeElement)) {
+  if ((evt.keyCode === KeyCodes.ESC) && !(setupUserName === document.activeElement)) {
     closePopup();
   }
 }
 
 function onPopupEnterPress(evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
+  if (evt.keyCode === KeyCodes.ENTER) {
     openPopup();
   }
 }
@@ -97,33 +105,6 @@ function closePopup() {
   document.removeEventListener('keydown', onPopupEscPress);
 }
 
-function showSetup(wizardOption) {
-  var wizardsList = createWizardsList(wizardOption);
-  var setupOpen = document.querySelector('.setup-open');
-
-  renderWizardList(wizardsList, wizardOption.COUNT);
-
-  setupOpen.addEventListener('click', function () {
-    openPopup();
-  });
-
-  setupOpen.addEventListener('keydown', function (evt) {
-    onPopupEnterPress(evt);
-  });
-}
-
-function hideSetup() {
-  var setupClose = document.querySelector('.setup-close');
-
-  setupClose.addEventListener('click', function () {
-    closePopup();
-  });
-
-  setupClose.addEventListener('keydown', function (evt) {
-    onPopupEscPress(evt);
-  });
-}
-
 function changeWizardColors(coatColors, element) {
   element.style.fill = getRandomArrValue(coatColors);
 }
@@ -132,7 +113,7 @@ function changeFireballColor(fireballColors, element) {
   element.style.background = getRandomArrValue(fireballColors);
 }
 
-function changeWizardSetup(wizardOptions) {
+function setWizardSetupHandler(wizardOptions) {
   var setupContainer = document.querySelector('.setup');
   var wizardCoat = setupContainer.querySelector('.wizard-coat');
   var wizardEyes = setupContainer.querySelector('.wizard-eyes');
@@ -151,6 +132,11 @@ function changeWizardSetup(wizardOptions) {
   });
 }
 
-showSetup(Wizards);
-hideSetup();
-changeWizardSetup(Wizards);
+renderWizardList(createWizardsList(Wizards), Wizards.COUNT);
+
+pageElements.setupOpen.addEventListener('click', openPopup);
+pageElements.setupOpen.addEventListener('keydown', onPopupEnterPress);
+
+pageElements.setupClose.addEventListener('click', closePopup);
+
+setWizardSetupHandler(Wizards);
