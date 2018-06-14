@@ -9,8 +9,14 @@ var Wizards = {
     'rgb(56, 159, 117)',
     'rgb(215, 210, 55)',
     'rgb(0, 0, 0)'],
-  EYES_COLORS: ['black', 'red', 'blue,', 'yellow', 'green'],
+  EYES_COLORS: ['black', 'red', 'blue', 'yellow', 'green'],
+  FIREBALL_COLORS: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'],
   COUNT: 4
+};
+
+var KeyCodes = {
+  ESC: 27,
+  ENTER: 13
 };
 
 function getRandomArrValue(arr) {
@@ -27,7 +33,8 @@ function createRandomWizard(wizardOption) {
   return {
     name: createRandomName(wizardOption.NAMES, wizardOption.SURNAMES),
     coatColor: getRandomArrValue(wizardOption.COAT_COLORS),
-    eyesColor: getRandomArrValue(wizardOption.EYES_COLORS)
+    eyesColor: getRandomArrValue(wizardOption.EYES_COLORS),
+    fireballColor: getRandomArrValue(wizardOption.FIREBALL_COLORS)
   };
 }
 
@@ -48,6 +55,7 @@ function createWizard(wizard) {
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
   wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
   wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+  document.querySelector('.setup-fireball-wrap').style.background = wizard.fireballColor;
 
   return wizardElement;
 }
@@ -62,16 +70,91 @@ function renderWizardList(wizard, wizardCount) {
   similarListElement.appendChild(fragment);
 }
 
-function showSetup(wizardOption) {
-  var wizardsList = createWizardsList(wizardOption);
+renderWizardList(createWizardsList(Wizards), Wizards.COUNT);
 
-  renderWizardList(wizardsList, wizardOption.COUNT);
+// ---------------------------------------------------- //
 
-  var setupContainer = document.querySelector('.setup');
-  var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
+var setupContainer = document.querySelector('.setup');
+var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
+var setupUserName = setupContainer.querySelector('.setup-user-name');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setupContainer.querySelector('.setup-close');
 
-  setupContainer.classList.remove('hidden');
-  setupSimilarContainer.classList.remove(('hidden'));
+function makeCounter() {
+  var currentCount = 1;
+
+  return function (arr) {
+    if (currentCount === arr.length) {
+      currentCount = 0;
+    }
+    return currentCount++;
+  };
 }
 
-showSetup(Wizards);
+var coatCounter = makeCounter();
+var eyesCounter = makeCounter();
+var fireballCounter = makeCounter();
+
+function openPopup() {
+  setupContainer.classList.remove('hidden');
+  setupSimilarContainer.classList.remove('hidden');
+  document.addEventListener('keydown', onEscPress);
+}
+
+function closePopup() {
+  setupContainer.classList.add('hidden');
+  document.removeEventListener('keydown', onEscPress);
+}
+
+function onEscPress(evt) {
+  if (evt.keyCode === KeyCodes.ESC && evt.target !== setupUserName) {
+    closePopup();
+  }
+}
+
+function onPopupOpenEnterPress(evt) {
+  if (evt.keyCode === KeyCodes.ENTER) {
+    openPopup();
+  }
+}
+
+function changeCoatColor(Colors, element) {
+  element.style.fill = Colors[coatCounter(Colors)];
+}
+
+function changeEyesColor(Colors, element) {
+  element.style.fill = Colors[eyesCounter(Colors)];
+}
+
+function changeFireballColor(Colors, element) {
+  element.style.background = Colors[fireballCounter(Colors)];
+}
+
+function setWizardSetupHandler(wizardOptions) {
+  var wizardCoat = setupContainer.querySelector('.wizard-coat');
+  var wizardEyes = setupContainer.querySelector('.wizard-eyes');
+  var fireball = setupContainer.querySelector('.setup-fireball-wrap');
+
+  wizardCoat.addEventListener('click', function () {
+    changeCoatColor(wizardOptions.COAT_COLORS, wizardCoat);
+  });
+
+  wizardEyes.addEventListener('click', function () {
+    changeEyesColor(wizardOptions.EYES_COLORS, wizardEyes);
+  });
+
+  fireball.addEventListener('click', function () {
+    changeFireballColor(wizardOptions.FIREBALL_COLORS, fireball);
+  });
+}
+
+setWizardSetupHandler(Wizards);
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
