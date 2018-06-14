@@ -95,14 +95,14 @@ var coatCounter = makeCounter();
 var eyesCounter = makeCounter();
 var fireballCounter = makeCounter();
 
-function openPopup(setupElement, setupSimilarElement) {
-  setupElement.classList.remove('hidden');
-  setupSimilarElement.classList.remove('hidden');
+function openPopup() {
+  setupContainer.classList.remove('hidden');
+  setupSimilarContainer.classList.remove('hidden');
   document.addEventListener('keydown', onEscPress);
 }
 
-function closePopup(setupElement) {
-  setupElement.classList.add('hidden');
+function closePopup() {
+  setupContainer.classList.add('hidden');
   document.removeEventListener('keydown', onEscPress);
 }
 
@@ -151,10 +151,10 @@ function setWizardSetupHandler(wizardOptions) {
 setWizardSetupHandler(Wizards);
 
 setupOpen.addEventListener('click', function () {
-  openPopup(setupContainer, setupSimilarContainer);
+  openPopup();
 });
 setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
 
 setupClose.addEventListener('click', function () {
-  closePopup(setupContainer);
+  closePopup();
 });
