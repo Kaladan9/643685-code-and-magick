@@ -74,9 +74,11 @@ renderWizardList(createWizardsList(Wizards), Wizards.COUNT);
 
 // ---------------------------------------------------- //
 
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = document.querySelector('.setup-close');
 var setupContainer = document.querySelector('.setup');
+var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
+var setupUserName = setupContainer.querySelector('.setup-user-name');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setupContainer.querySelector('.setup-close');
 
 function makeCounter() {
   var currentCount = 1;
@@ -93,22 +95,19 @@ var coatCounter = makeCounter();
 var eyesCounter = makeCounter();
 var fireballCounter = makeCounter();
 
-function openPopup() {
-  var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
-
-  setupContainer.classList.remove('hidden');
-  setupSimilarContainer.classList.remove(('hidden'));
+function openPopup(setupElement, setupSimilarElement) {
+  setupElement.classList.remove('hidden');
+  setupSimilarElement.classList.remove('hidden');
   document.addEventListener('keydown', onEscPress);
 }
 
-function closePopup() {
-  setupContainer.classList.add('hidden');
+function closePopup(setupElement) {
+  setupElement.classList.add('hidden');
   document.removeEventListener('keydown', onEscPress);
 }
 
 function onEscPress(evt) {
-  var setupUserName = document.querySelector('.setup-user-name');
-  if (evt.keyCode === KeyCodes.ESC && evt.currentTarget !== setupUserName) {
+  if (evt.keyCode === KeyCodes.ESC && evt.target !== setupUserName) {
     closePopup();
   }
 }
@@ -152,10 +151,10 @@ function setWizardSetupHandler(wizardOptions) {
 setWizardSetupHandler(Wizards);
 
 setupOpen.addEventListener('click', function () {
-  openPopup();
+  openPopup(setupContainer, setupSimilarContainer);
 });
 setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
 
 setupClose.addEventListener('click', function () {
-  closePopup();
+  closePopup(setupContainer);
 });
