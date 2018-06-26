@@ -175,13 +175,10 @@ setupClose.addEventListener('click', function () {
 
 var dialogHandler = setupContainer.querySelector('.upload');
 
-function onClickPreventDefault(evt) {
+function onDialogMouseDown(evt) {
   evt.preventDefault();
-  dialogHandler.removeEventListener('click', onClickPreventDefault);
-}
+  document.body.style.overflow = 'hidden';
 
-dialogHandler.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
 
   var startCoords = {
     x: evt.clientX,
@@ -215,12 +212,20 @@ dialogHandler.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mouseup', onMouseUp);
 
     if (dragged) {
-      dialogHandler.addEventListener('click', onClickPreventDefault);
+      if (dragged) {
+        var onClickPreventDefault = function (evt) {
+          evt.preventDefault();
+          dialogHandler.removeEventListener('click', onClickPreventDefault);
+        };
+        dialogHandler.addEventListener('click', onClickPreventDefault);
+      }
     }
 
   }
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-});
+}
+
+dialogHandler.addEventListener('mousedown', onDialogMouseDown);
 
