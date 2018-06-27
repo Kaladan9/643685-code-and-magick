@@ -175,6 +175,11 @@ setupClose.addEventListener('click', function () {
 
 var dialogHandler = setupContainer.querySelector('.upload');
 
+function onClickPreventDefault(evt) {
+  evt.preventDefault();
+  dialogHandler.removeEventListener('click', onClickPreventDefault);
+}
+
 function onDialogMouseDown(evt) {
   evt.preventDefault();
   document.body.style.overflow = 'hidden';
@@ -208,19 +213,11 @@ function onDialogMouseDown(evt) {
   function onMouseUp(upEvt) {
     upEvt.preventDefault();
 
+    if (dragged) {
+      dialogHandler.addEventListener('click', onClickPreventDefault);
+    }
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-
-    if (dragged) {
-      if (dragged) {
-        var onClickPreventDefault = function (evt) {
-          evt.preventDefault();
-          dialogHandler.removeEventListener('click', onClickPreventDefault);
-        };
-        dialogHandler.addEventListener('click', onClickPreventDefault);
-      }
-    }
-
   }
 
   document.addEventListener('mousemove', onMouseMove);
