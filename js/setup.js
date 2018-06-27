@@ -1,19 +1,22 @@
 'use strict';
 
-// setup.js
 (function () {
+
+  var Wizards = window.utils.Wizards;
+  var getRandomArrValue = window.utils.getRandomArrValue;
+
   function createRandomName(names, surnames) {
-    var randomName = window.util.getRandomArrValue(names);
-    var randomSurname = window.util.getRandomArrValue(surnames);
+    var randomName = getRandomArrValue(names);
+    var randomSurname = getRandomArrValue(surnames);
     return randomName + ' ' + randomSurname;
   }
 
   function createRandomWizard(wizardOption) {
     return {
       name: createRandomName(wizardOption.NAMES, wizardOption.SURNAMES),
-      coatColor: window.util.getRandomArrValue(wizardOption.COAT_COLORS),
-      eyesColor: window.util.getRandomArrValue(wizardOption.EYES_COLORS),
-      fireballColor: window.util.getRandomArrValue(wizardOption.FIREBALL_COLORS)
+      coatColor: getRandomArrValue(wizardOption.COAT_COLORS),
+      eyesColor: getRandomArrValue(wizardOption.EYES_COLORS),
+      fireballColor: getRandomArrValue(wizardOption.FIREBALL_COLORS)
     };
   }
 
@@ -49,15 +52,8 @@
     similarListElement.appendChild(fragment);
   }
 
-  renderWizardList(createWizardsList(window.Wizards), window.Wizards.COUNT);
+  renderWizardList(createWizardsList(Wizards), Wizards.COUNT);
+
 })();
 
-// ---------------------------------------------------- //
-
-// dialog.js
-
-
-// ----------------------------------------------- //
-
-// dialog-move
 

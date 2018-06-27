@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var setupContainer = document.querySelector('.setup');
   var dialogHandler = setupContainer.querySelector('.upload');
 
@@ -54,4 +55,5 @@
   }
 
   dialogHandler.addEventListener('mousedown', onDialogMouseDown);
+
 })();

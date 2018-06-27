@@ -1,15 +1,19 @@
 'use strict';
 
 (function () {
+
+  var Wizards = window.utils.Wizards;
+  var makeCounter = window.utils.makeCounter;
+
   var setupContainer = document.querySelector('.setup');
   var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
   var setupUserName = setupContainer.querySelector('.setup-user-name');
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = setupContainer.querySelector('.setup-close');
 
-  var coatCounter = window.makeCounter();
-  var eyesCounter = window.makeCounter();
-  var fireballCounter = window.makeCounter();
+  var coatCounter = makeCounter();
+  var eyesCounter = makeCounter();
+  var fireballCounter = makeCounter();
 
   function openPopup() {
     setupContainer.classList.remove('hidden');
@@ -46,37 +50,25 @@
     }
   }
 
-  function changeCoatColor(Colors, element) {
-    element.style.fill = Colors[coatCounter(Colors)];
-  }
-
-  function changeEyesColor(Colors, element) {
-    element.style.fill = Colors[eyesCounter(Colors)];
-  }
-
-  function changeFireballColor(Colors, element) {
-    element.style.background = Colors[fireballCounter(Colors)];
-  }
-
   function setWizardSetupHandler(wizardOptions) {
     var wizardCoat = setupContainer.querySelector('.wizard-coat');
     var wizardEyes = setupContainer.querySelector('.wizard-eyes');
     var fireball = setupContainer.querySelector('.setup-fireball-wrap');
 
     wizardCoat.addEventListener('click', function () {
-      changeCoatColor(wizardOptions.COAT_COLORS, wizardCoat);
+      wizardCoat.style.fill = wizardOptions.COAT_COLORS[coatCounter(wizardOptions.COAT_COLORS)];
     });
 
     wizardEyes.addEventListener('click', function () {
-      changeEyesColor(wizardOptions.EYES_COLORS, wizardEyes);
+      wizardEyes.style.fill = wizardOptions.EYES_COLORS[eyesCounter(wizardOptions.EYES_COLORS)];
     });
 
     fireball.addEventListener('click', function () {
-      changeFireballColor(wizardOptions.FIREBALL_COLORS, fireball);
+      fireball.style.background = wizardOptions.FIREBALL_COLORS[fireballCounter(wizardOptions.FIREBALL_COLORS)];
     });
   }
 
-  setWizardSetupHandler(window.Wizards);
+  setWizardSetupHandler(Wizards);
 
   setupOpen.addEventListener('click', function () {
     openPopup();
@@ -86,4 +78,5 @@
   setupClose.addEventListener('click', function () {
     closePopup();
   });
+
 })();
