@@ -182,8 +182,6 @@ function onClickPreventDefault(evt) {
 
 function onDialogMouseDown(evt) {
   evt.preventDefault();
-  document.body.style.overflow = 'hidden';
-
 
   var startCoords = {
     x: evt.clientX,
@@ -194,6 +192,7 @@ function onDialogMouseDown(evt) {
 
   function onMouseMove(moveEvt) {
     moveEvt.preventDefault();
+    document.body.style.overflow = 'hidden';
     dragged = true;
 
     var shift = {
@@ -212,6 +211,7 @@ function onDialogMouseDown(evt) {
 
   function onMouseUp(upEvt) {
     upEvt.preventDefault();
+    document.body.style.overflow = '';
 
     if (dragged) {
       dialogHandler.addEventListener('click', onClickPreventDefault);
