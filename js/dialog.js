@@ -10,6 +10,7 @@
   var setupUserName = setupContainer.querySelector('.setup-user-name');
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = setupContainer.querySelector('.setup-close');
+  var userForm = setupContainer.querySelector('.setup-wizard-form');
 
   var coatCounter = makeCounter();
   var eyesCounter = makeCounter();
@@ -19,6 +20,7 @@
     setupContainer.classList.remove('hidden');
     setupSimilarContainer.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
+    userForm.addEventListener('submit', submitForm);
   }
 
   function getDefaultSetupPosition() {
@@ -39,13 +41,13 @@
   }
 
   function onEscPress(evt) {
-    if (evt.keyCode === window.KeyCodes.ESC && evt.target !== setupUserName) {
+    if (evt.keyCode === window.utils.KeyCodes.ESC && evt.target !== setupUserName) {
       closePopup();
     }
   }
 
   function onPopupOpenEnterPress(evt) {
-    if (evt.keyCode === window.KeyCodes.ENTER) {
+    if (evt.keyCode === window.utils.KeyCodes.ENTER) {
       openPopup();
     }
   }
@@ -66,6 +68,11 @@
     fireball.addEventListener('click', function () {
       fireball.style.background = wizardOptions.FIREBALL_COLORS[fireballCounter(wizardOptions.FIREBALL_COLORS)];
     });
+  }
+
+  function submitForm(evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(userForm), closePopup, window.utils.showError);
   }
 
   setWizardSetupHandler(Wizards);
