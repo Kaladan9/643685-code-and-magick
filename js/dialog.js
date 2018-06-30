@@ -26,21 +26,12 @@
     userForm.addEventListener('submit', submitForm);
   }
 
-  function getDefaultSetupPosition() {
-    return {
-      top: window.getComputedStyle(setupContainer).top,
-      left: window.getComputedStyle(setupContainer).left
-    };
-  }
-
-  var defaultSetupPosition = getDefaultSetupPosition();
-
   function closePopup() {
     setupContainer.classList.add('hidden');
     document.removeEventListener('keydown', onEscPress);
 
-    setupContainer.style.top = defaultSetupPosition.top;
-    setupContainer.style.left = defaultSetupPosition.left;
+    setupContainer.style.top = '';
+    setupContainer.style.left = '';
   }
 
   function onEscPress(evt) {
