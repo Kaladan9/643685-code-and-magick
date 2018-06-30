@@ -3,11 +3,14 @@
 (function () {
 
   var Wizards = window.utils.Wizards;
+  var load = window.backend.load;
+  var showError = window.utils.showError;
+  var similarWizardTemplate = document
+    .querySelector('#similar-wizard-template')
+    .content
+    .querySelector('.setup-similar-item');
 
   function createWizard(wizard) {
-    var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-      .content
-      .querySelector('.setup-similar-item');
     var wizardElement = similarWizardTemplate.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -18,24 +21,18 @@
     return wizardElement;
   }
 
-  function renderWizardList(wizard, wizardCount) {
+  function renderWizardList(wizards) {
     var similarListElement = document.querySelector('.setup-similar-list');
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < wizardCount; i++) {
-      fragment.appendChild(createWizard(wizard[i]));
+    for (var i = 0; i < Wizards.COUNT; i++) {
+      fragment.appendChild(createWizard(wizards[i]));
     }
+
     similarListElement.appendChild(fragment);
   }
 
-  var wizardList = [];
-
-  function onLoad(data) {
-    wizardList = data;
-    renderWizardList(wizardList, Wizards.COUNT);
-  }
-
-  window.backend.load(onLoad, window.utils.showError);
+  load(renderWizardList, showError);
 
 })();
 

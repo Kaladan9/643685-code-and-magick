@@ -4,6 +4,9 @@
 
   var Wizards = window.utils.Wizards;
   var makeCounter = window.utils.makeCounter;
+  var KeyCodes = window.utils.KeyCodes;
+  var save = window.backend.save;
+  var showError = window.utils.showError;
 
   var setupContainer = document.querySelector('.setup');
   var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
@@ -41,13 +44,13 @@
   }
 
   function onEscPress(evt) {
-    if (evt.keyCode === window.utils.KeyCodes.ESC && evt.target !== setupUserName) {
+    if (evt.keyCode === KeyCodes.ESC && evt.target !== setupUserName) {
       closePopup();
     }
   }
 
   function onPopupOpenEnterPress(evt) {
-    if (evt.keyCode === window.utils.KeyCodes.ENTER) {
+    if (evt.keyCode === KeyCodes.ENTER) {
       openPopup();
     }
   }
@@ -72,16 +75,15 @@
 
   function submitForm(evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(userForm), closePopup, window.utils.showError);
+    save(new FormData(userForm), closePopup, showError);
   }
 
   setWizardSetupHandler(Wizards);
 
+  setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
   setupOpen.addEventListener('click', function () {
     openPopup();
   });
-  setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
-
   setupClose.addEventListener('click', function () {
     closePopup();
   });
