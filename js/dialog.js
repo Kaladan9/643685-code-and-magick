@@ -30,8 +30,7 @@
     setupContainer.classList.add('hidden');
     document.removeEventListener('keydown', onEscPress);
 
-    setupContainer.style.top = '';
-    setupContainer.style.left = '';
+    setupContainer.style = '';
   }
 
   function onEscPress(evt) {
