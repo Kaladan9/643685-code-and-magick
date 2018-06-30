@@ -4,12 +4,16 @@
 
   var Wizards = window.utils.Wizards;
   var makeCounter = window.utils.makeCounter;
+  var KeyCodes = window.utils.KeyCodes;
+  var save = window.backend.save;
+  var showError = window.utils.showError;
 
   var setupContainer = document.querySelector('.setup');
   var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
   var setupUserName = setupContainer.querySelector('.setup-user-name');
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = setupContainer.querySelector('.setup-close');
+  var userForm = setupContainer.querySelector('.setup-wizard-form');
 
   var coatCounter = makeCounter();
   var eyesCounter = makeCounter();
@@ -19,33 +23,24 @@
     setupContainer.classList.remove('hidden');
     setupSimilarContainer.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
+    userForm.addEventListener('submit', submitForm);
   }
-
-  function getDefaultSetupPosition() {
-    return {
-      top: window.getComputedStyle(setupContainer).top,
-      left: window.getComputedStyle(setupContainer).left
-    };
-  }
-
-  var defaultSetupPosition = getDefaultSetupPosition();
 
   function closePopup() {
     setupContainer.classList.add('hidden');
     document.removeEventListener('keydown', onEscPress);
 
-    setupContainer.style.top = defaultSetupPosition.top;
-    setupContainer.style.left = defaultSetupPosition.left;
+    setupContainer.style = '';
   }
 
   function onEscPress(evt) {
-    if (evt.keyCode === window.KeyCodes.ESC && evt.target !== setupUserName) {
+    if (evt.keyCode === KeyCodes.ESC && evt.target !== setupUserName) {
       closePopup();
     }
   }
 
   function onPopupOpenEnterPress(evt) {
-    if (evt.keyCode === window.KeyCodes.ENTER) {
+    if (evt.keyCode === KeyCodes.ENTER) {
       openPopup();
     }
   }
@@ -68,13 +63,17 @@
     });
   }
 
+  function submitForm(evt) {
+    evt.preventDefault();
+    save(new FormData(userForm), closePopup, showError);
+  }
+
   setWizardSetupHandler(Wizards);
 
+  setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
   setupOpen.addEventListener('click', function () {
     openPopup();
   });
-  setupOpen.addEventListener('keydown', onPopupOpenEnterPress);
-
   setupClose.addEventListener('click', function () {
     closePopup();
   });

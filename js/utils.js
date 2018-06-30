@@ -2,6 +2,21 @@
 
 (function () {
 
+  function showError(errorMessage) {
+    var node = document.createElement('div');
+    node.style.zIndex = 100;
+    node.style.margin = '0 auto';
+    node.style.textAlign = 'center';
+    node.style.backgroundColor = 'red';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
+
   window.utils = {
     Wizards: {
       NAMES: ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Лопита', 'Вашингтон'],
@@ -35,7 +50,9 @@
 
     getRandomArrValue: function (arr) {
       return arr[Math.floor(Math.random() * arr.length)];
-    }
+    },
+
+    showError: showError
   };
 
 })();
