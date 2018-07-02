@@ -7,6 +7,8 @@
   var KeyCodes = window.utils.KeyCodes;
   var save = window.backend.save;
   var showError = window.utils.showError;
+  var updateWizards = window.updateWizards;
+  var debounce = window.debounce;
 
   var setupContainer = document.querySelector('.setup');
   var setupSimilarContainer = setupContainer.querySelector('.setup-similar');
@@ -45,6 +47,10 @@
     }
   }
 
+  var showSimilarWizards = debounce(function () {
+    updateWizards(window.wizards);
+  });
+
   function setWizardSetupHandler(wizardOptions) {
     var wizardCoat = setupContainer.querySelector('.wizard-coat');
     var wizardEyes = setupContainer.querySelector('.wizard-eyes');
@@ -52,10 +58,12 @@
 
     wizardCoat.addEventListener('click', function () {
       wizardCoat.style.fill = wizardOptions.COAT_COLORS[coatCounter(wizardOptions.COAT_COLORS)];
+      showSimilarWizards();
     });
 
     wizardEyes.addEventListener('click', function () {
       wizardEyes.style.fill = wizardOptions.EYES_COLORS[eyesCounter(wizardOptions.EYES_COLORS)];
+      showSimilarWizards();
     });
 
     fireball.addEventListener('click', function () {
