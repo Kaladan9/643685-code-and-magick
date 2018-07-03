@@ -16,6 +16,7 @@
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = setupContainer.querySelector('.setup-close');
   var userForm = setupContainer.querySelector('.setup-wizard-form');
+  var sendButton = setupContainer.querySelector('.setup-submit');
 
   var coatCounter = makeCounter();
   var eyesCounter = makeCounter();
@@ -26,6 +27,7 @@
     setupSimilarContainer.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
     userForm.addEventListener('submit', submitForm);
+    sendButton.disabled = '';
   }
 
   function closePopup() {
@@ -47,10 +49,6 @@
     }
   }
 
-  var showSimilarWizards = debounce(function () {
-    updateWizards(window.wizards);
-  });
-
   function setWizardSetupHandler(wizardOptions) {
     var wizardCoat = setupContainer.querySelector('.wizard-coat');
     var wizardEyes = setupContainer.querySelector('.wizard-eyes');
@@ -58,12 +56,12 @@
 
     wizardCoat.addEventListener('click', function () {
       wizardCoat.style.fill = wizardOptions.COAT_COLORS[coatCounter(wizardOptions.COAT_COLORS)];
-      showSimilarWizards();
+      debounce(updateWizards);
     });
 
     wizardEyes.addEventListener('click', function () {
       wizardEyes.style.fill = wizardOptions.EYES_COLORS[eyesCounter(wizardOptions.EYES_COLORS)];
-      showSimilarWizards();
+      debounce(updateWizards);
     });
 
     fireball.addEventListener('click', function () {
@@ -73,6 +71,7 @@
 
   function submitForm(evt) {
     evt.preventDefault();
+    sendButton.disabled = 'disabled';
     save(new FormData(userForm), closePopup, showError);
   }
 

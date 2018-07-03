@@ -36,7 +36,7 @@
     similarListElement.appendChild(fragment);
   }
 
-  function updateWizards(wizards) {
+  function updateWizards() {
     var coatColor = wizardCoat.style.fill || Wizards.COAT_COLORS[0];
     var eyesColor = wizardEyes.style.fill || Wizards.EYES_COLORS[0];
 
@@ -53,11 +53,11 @@
       return rank;
     }
 
-    wizards.sort(function (left, right) {
+    window.wizards.sort(function (left, right) {
       return getRank(right) - getRank(left);
     });
 
-    renderWizardList(wizards);
+    renderWizardList(window.wizards);
   }
 
   function successHandler(data) {
